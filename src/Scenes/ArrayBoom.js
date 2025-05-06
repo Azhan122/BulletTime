@@ -40,18 +40,28 @@ class ArrayBoom extends Phaser.Scene {
 
         // Sound asset from the Kenny Music Jingles pack
         // https://kenney.nl/assets/music-jingles
-        this.load.audio("dadada", "jingles_NES13.ogg");
+        this.load.audio("dadada", "glass_001.ogg");
     }
 
     create() {
         let my = this.my;
+        this.map = this.add.tilemap("map", 16, 16, 10, 10);
+        this.tileset = this.map.addTilesetImage("fish-tiles", "fishBack");
+        this.water = this.map.createLayer("Water", this.tileset, 0, 0);
+        this.sand = this.map.createLayer("Sand", this.tileset, 0, -420);
 
-        my.sprite.elephant = this.add.sprite(game.config.width/2, game.config.height - 40, "elephant");
+        my.sprite.rock = this.add.sprite(game.config.width/2, game.config.height - 100, "fishBits", "fishTile_085.png");
+        my.sprite.rock0 = this.add.sprite(game.config.width/3, game.config.height/2 + 50, "fishBits", "fishTile_084.png");
+        my.sprite.seaweed = this.add.sprite(game.config.width/2 + 250, game.config.height/2 + 100, "fishBits", "fishTile_032.png");
+        my.sprite.seaweed0 = this.add.sprite(game.config.width - 200, game.config.height/2 + 200, "fishBits", "fishTile_034.png");
+        my.sprite.seaweed1 = this.add.sprite(game.config.width/10, game.config.height/2 + 140, "fishBits", "fishTile_014.png");
+        my.sprite.fossil = this.add.sprite(game.config.width/2 - 200, game.config.height/2 + 255, "fishBits", "fishTile_091.png");
+        /*my.sprite.elephant = this.add.sprite(game.config.width/2, game.config.height - 40, "elephant");
         my.sprite.elephant.setScale(0.25);
 
         my.sprite.hippo = this.add.sprite(game.config.width/2, 80, "hippo");
         my.sprite.hippo.setScale(0.25);
-        my.sprite.hippo.scorePoints = 25;
+        my.sprite.hippo.scorePoints = 25;*/
 
         // Notice that in this approach, we don't create any bullet sprites in create(),
         // and instead wait until we need them, based on the number of space bar presses
@@ -71,27 +81,34 @@ class ArrayBoom extends Phaser.Scene {
         });
 
         // Create key objects
-        this.left = this.input.keyboard.addKey("A");
-        this.right = this.input.keyboard.addKey("D");
-        this.nextScene = this.input.keyboard.addKey("S");
-        this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.up = this.input.keyboard.addKey("A");
+        this.down = this.input.keyboard.addKey("D");
+        this.nextScene = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.space = this.input.keyboard.addKey("S");
 
         // Set movement speeds (in pixels/tick)
         this.playerSpeed = 5;
         this.bulletSpeed = 5;
 
         // update HTML description
-        document.getElementById('description').innerHTML = '<h2>Array Boom.js</h2><br>A: left // D: right // Space: fire/emit // S: Next Scene'
+        document.getElementById('description').innerHTML = '<h2>Fishing Simulator</h2>Press Space to try again'
 
         // Put score on screen
-        my.text.score = this.add.bitmapText(580, 0, "rocketSquare", "Score " + this.myScore);
+        //my.text.score = this.add.bitmapText(580, 0, "rocketSquare", "Score " + this.myScore);
 
         // Put title on screen
-        this.add.text(10, 5, "Hippo Hug!", {
-            fontFamily: 'Times, serif',
-            fontSize: 24,
+        this.add.text(game.config.width/4, game.config.height/3, "Game End", {
+            fontFamily: 'Brush Script MT, cursive',
+            fontSize: 70,
             wordWrap: {
-                width: 60
+                width: 500
+            }
+        });
+        this.add.text(game.config.width/4 - 15, game.config.height/2, "Press Space to replay", {
+            fontFamily: 'Brush Script MT, cursive',
+            fontSize: 35,
+            wordWrap: {
+                width: 500
             }
         });
 
@@ -101,7 +118,7 @@ class ArrayBoom extends Phaser.Scene {
         let my = this.my;
 
         // Moving left
-        if (this.left.isDown) {
+        /*if (this.up.isDown) {
             // Check to make sure the sprite can actually move left
             if (my.sprite.elephant.x > (my.sprite.elephant.displayWidth/2)) {
                 my.sprite.elephant.x -= this.playerSpeed;
@@ -109,7 +126,7 @@ class ArrayBoom extends Phaser.Scene {
         }
 
         // Moving right
-        if (this.right.isDown) {
+        if (this.down.isDown) {
             // Check to make sure the sprite can actually move right
             if (my.sprite.elephant.x < (game.config.width - (my.sprite.elephant.displayWidth/2))) {
                 my.sprite.elephant.x += this.playerSpeed;
@@ -152,7 +169,7 @@ class ArrayBoom extends Phaser.Scene {
                 this.updateScore();
                 // Play sound
                 this.sound.play("dadada", {
-                    volume: 1   // Can adjust volume using this, goes from 0 to 1
+                    volume: 0.2   // Can adjust volume using this, goes from 0 to 1
                 });
                 // Have new hippo appear after end of animation
                 this.puff.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
@@ -167,13 +184,13 @@ class ArrayBoom extends Phaser.Scene {
         for (let bullet of my.sprite.bullet) {
             bullet.y -= this.bulletSpeed;
         }
-
+*/
         if (Phaser.Input.Keyboard.JustDown(this.nextScene)) {
-            this.scene.start("fixedArrayBullet");
+            this.scene.start("singleBullet")
         }
 
     }
-
+/*
     // A center-radius AABB collision check
     collides(a, b) {
         if (Math.abs(a.x - b.x) > (a.displayWidth/2 + b.displayWidth/2)) return false;
@@ -184,7 +201,7 @@ class ArrayBoom extends Phaser.Scene {
     updateScore() {
         let my = this.my;
         my.text.score.setText("Score " + this.myScore);
-    }
+    }*/
 
 }
-         
+    
